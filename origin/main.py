@@ -21,4 +21,3 @@ class Framework:
         code, body = view()
         start_response(code, [('Content-Type', 'text/html')])
         return [body.encode('utf-8')]
-        
