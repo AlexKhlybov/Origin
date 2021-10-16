@@ -8,9 +8,11 @@ class Framework:
         self.routes_lst = routes_obj
     
     def __call__(self, environ, start_response):
+        # Получаем адрес, по которому пользователь выполнил переход
         path = environ['PATH_INFO']
 
-        if not path.endswitch('/'):
+        # Добавляем закрывающий слеш
+        if not path.endswith('/'):
             path = f'{path}/'
 
         if path in self.routes_lst:

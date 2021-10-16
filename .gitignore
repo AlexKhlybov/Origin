@@ -157,3 +157,5 @@ tmp/
 
 # File PostgreSQL
 postgresql
+
+.idea/
