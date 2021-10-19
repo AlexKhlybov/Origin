@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}
+    Контакты
+{% endblock title %}
+{% block style %}
+    {% include 'inc-style.html' %}
+{% endblock style %}
+{% block menu %}
+    {% include 'inc-menu.html' %}
+{% endblock menu %}
+{% block body %}
+    <h1>Контакты</h1>
+    <p>С нами можно связаться:</p>
+    <p>Сегодня: {{data}} <b>(дата подставляется шаблоном)</b></p>
+    <ul>
+        <li>Телефон: {{ telephone }}</li>
+        <li>e-mail: {{ email }}</li>
+        <li>Адрес: {{ address }}</li>
+    </ul>
+{% endblock body %}
