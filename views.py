@@ -1,37 +1,38 @@
 from datetime import date
 
 from components.models import Engine
+from components.decorators import AppRoute
 from origin.templator import render
 
 site = Engine()
-
-
-class Index:
-    def __call__(self):
-        return "200 OK", render("index.html", object_list=site.categories)
-
-
-class About:
-    def __call__(self):
-        return "200 OK", render("about.html", data=date.today())
-
-
-class Contacts:
-    def __call__(self):
-        return "200 OK", render("contacts.html", data=date.today())
-
-
-class StudyPrograms:
-    def __call__(self, request):
-        return "200 OK", render("study-programs.html", data=date.today())
-
+routes = {}
 
 class NotFoud404:
     def __call__(self, request):
         return "404 WHAT", "404 PAGE Not Found"
 
+@AppRoute(routes=routes, url='/')
+class Index:
+    def __call__(self):
+        return "200 OK", render("index.html", object_list=site.categories)
+
+@AppRoute(routes=routes, url='/about/')
+class About:
+    def __call__(self):
+        return "200 OK", render("about.html", data=date.today())
+
+@AppRoute(routes=routes, url='/contacts/')
+class Contacts:
+    def __call__(self):
+        return "200 OK", render("contacts.html", data=date.today())
+
+@AppRoute(routes=routes, url='/study_programs/')
+class StudyPrograms:
+    def __call__(self, request):
+        return "200 OK", render("study-programs.html", data=date.today())
 
 # Класс-контроллер - Страница "Список курсов"
+@AppRoute(routes=routes, url='/courses_list/')
 class CoursesList:
     def __call__(self, request):
 
@@ -50,6 +51,7 @@ class CoursesList:
 
 
 # Класс-контроллер - Страница "Создать курс"
+@AppRoute(routes=routes, url='/create_course/')
 class CreateCourse:
     category_id = -1
 
@@ -89,6 +91,7 @@ class CreateCourse:
 
 
 # Класс-контроллер - Страница "Создать категорию"
+@AppRoute(routes=routes, url='/create_category/')
 class CreateCategory:
     def __call__(self, request):
 
@@ -119,6 +122,7 @@ class CreateCategory:
 
 
 # Класс-контроллер - Страница "Список категорий"
+@AppRoute(routes=routes, url='/category_list/')
 class CategoryList:
     def __call__(self, request):
         return "200 OK", render(
