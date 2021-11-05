@@ -2,7 +2,10 @@ from datetime import date
 
 from components.models import Engine
 from components.decorators import AppRoute
+from components.cbv import ListView, CreateView
+
 from origin.templator import render
+
 
 site = Engine()
 routes = {}
@@ -30,6 +33,7 @@ class Contacts:
 class StudyPrograms:
     def __call__(self, request):
         return "200 OK", render("study-programs.html", data=date.today())
+
 
 # Класс-контроллер - Страница "Список курсов"
 @AppRoute(routes=routes, url='/courses_list/')
@@ -128,3 +132,32 @@ class CategoryList:
         return "200 OK", render(
             "category_list.html", objects_list=site.categories
         )
+
+
+# Класс-контроллер - Страница "Список студентов"
+@AppRoute(routes=routes, url='/student_list/')
+class StudentListView(ListView):
+    queryset = site.students
+    template_name = 'student_list.html'
+
+
+# Класс-контроллер - Страница "Создать студента"
+@AppRoute(routes=routes, url='/create_student/')
+class StudentCreateView(CreateView):
+    template_name = 'create_student.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('student', name)
+        site.students.append(new_obj)
+
+
+# Класс-контроллер - Страница "Добавить студента на курс"
+@AppRoute(routes=routes, url='/add_student/')
+class AddStudentByCourseCreateView(CreateView):
+    template_name = 'add_student.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        return context

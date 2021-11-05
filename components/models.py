@@ -3,7 +3,8 @@ import quopri
 
 # Класс-Абстрактный пользователь
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class Teacher(User):
@@ -11,7 +12,9 @@ class Teacher(User):
 
 
 class Student(User):
-    pass
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 # Класс-Фабрика пользователей
@@ -32,6 +35,15 @@ class Course:
         self.name = name
         self.category = category
         self.category.courses.append(self)
+        self.students = []
+        super().__init__()
+    
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student: Student):
+        self.students.append(student)
+        student.courses.append(self)
 
 
 # Класс-Интерактивный курс
