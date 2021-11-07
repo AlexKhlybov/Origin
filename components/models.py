@@ -24,9 +24,10 @@ class UserFactory:
         "teacher": Teacher,
     }
 
+    # порождающий паттерн Фабричный метод
     @classmethod
-    def create(cls, type_):
-        return cls.types[type_]()
+    def create(cls, type_, name):
+        return cls.types[type_](name)
 
 
 # Класс-Курс
@@ -96,8 +97,8 @@ class Engine:
         self.categories = []
 
     @staticmethod
-    def create_user(type_):
-        return UserFactory.create(type_)
+    def create_user(type_, name):
+        return UserFactory.create(type_, name)
 
     @staticmethod
     def create_category(name, category=None):
@@ -112,13 +113,18 @@ class Engine:
 
     @staticmethod
     def create_course(type_, name, category):
-        return CourseFactoy(type_, name, category)
+        return CourseFactoy.create(type_, name, category)
 
     def get_course(self, name):
         for item in self.courses:
             if item.name == name:
                 return item
         return None
+    
+    def get_student(self, name):
+        for item in self.students:
+            if item.name == name:
+                return item
 
     @staticmethod
     def decode_value(val):

@@ -14,25 +14,25 @@ class Framework:
 
     def __call__(self, environ, start_response):
         # Получаем адрес, по которому пользователь выполнил переход
-        path = environ["PATH_INFO"]
+        path = environ['PATH_INFO']
 
         # Добавляем закрывающий слеш
-        if not path.endswith("/"):
-            path = f"{path}/"
+        if not path.endswith('/'):
+            path = f'{path}/'
 
         request = {}
         # Получаем все данные запроса
-        method = environ["REQUEST_METHOD"]
-        request["method"] = method
+        method = environ['REQUEST_METHOD']
+        request['method'] = method
 
-        if method == "POST":
+        if method == 'POST':
             data = PostRequests().get_request_params(environ)
-            request["data"] = data
-            print(f"Нам пришел POST-запрос: {Framework.decode_value(data)}")
-        if method == "GET":
+            request['data'] = data
+            print(f'Нам пришёл post-запрос: {Framework.decode_value(data)}')
+        if method == 'GET':
             request_params = GetRequests().get_request_params(environ)
-            request["request_params"] = request_params
-            print(f"Нам пришли GET-параметры: {request_params}")
+            request['request_params'] = request_params
+            print(f'Нам пришли GET-параметры: {request_params}')
 
         # Находим нужный контроллер
         if path in self.routes_lst:
@@ -40,9 +40,10 @@ class Framework:
         else:
             view = PageNotFound404()
 
-        code, body = view()
-        start_response(code, [("Content-Type", "text/html")])
-        return [body.encode("utf-8")]
+        # Запускаем контроллер
+        code, body = view(request)
+        start_response(code, [('Content-Type', 'text/html')])
+        return [body.encode('utf-8')]
 
     @staticmethod
     def decode_value(data):

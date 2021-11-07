@@ -46,7 +46,7 @@ class CreateView(TemplateView):
 
     @staticmethod
     def get_request_data(request):
-        return request('data')
+        return request['data']
 
     def create_obj(self, data):
         pass

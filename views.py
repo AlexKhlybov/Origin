@@ -16,17 +16,17 @@ class NotFoud404:
 
 @AppRoute(routes=routes, url='/')
 class Index:
-    def __call__(self):
+    def __call__(self, request):
         return "200 OK", render("index.html", object_list=site.categories)
 
 @AppRoute(routes=routes, url='/about/')
 class About:
-    def __call__(self):
+    def __call__(self, request):
         return "200 OK", render("about.html", data=date.today())
 
 @AppRoute(routes=routes, url='/contacts/')
 class Contacts:
-    def __call__(self):
+    def __call__(self, request):
         return "200 OK", render("contacts.html", data=date.today())
 
 @AppRoute(routes=routes, url='/study_programs/')
@@ -97,17 +97,18 @@ class CreateCourse:
 # Класс-контроллер - Страница "Создать категорию"
 @AppRoute(routes=routes, url='/create_category/')
 class CreateCategory:
+
     def __call__(self, request):
 
-        if request["method"] == "POST":
-
+        if request['method'] == 'POST':
+            # метод пост
             print(request)
-            data = request["data"]
+            data = request['data']
 
-            name = data["name"]
+            name = data['name']
             name = site.decode_value(name)
 
-            category_id = data.get("category_id")
+            category_id = data.get('category_id')
 
             category = None
             if category_id:
@@ -117,12 +118,12 @@ class CreateCategory:
 
             site.categories.append(new_category)
 
-            return "200 OK", render("index.html", objects_list=site.categories)
+            return '200 OK', render('index.html',
+                                    objects_list=site.categories)
         else:
             categories = site.categories
-            return "200 OK", render(
-                "create_category.html", categories=categories
-            )
+            return '200 OK', render('create_category.html',
+                                    categories=categories)
 
 
 # Класс-контроллер - Страница "Список категорий"
@@ -160,4 +161,15 @@ class AddStudentByCourseCreateView(CreateView):
 
     def get_context_data(self):
         context = super().get_context_data()
+        context['courses'] = site.courses
+        context['students'] = site.students
         return context
+
+    def create_obj(self, data: dict):
+        course_name = data['course_name']
+        course_name = site.decode_value(course_name)
+        course = site.get_course(course_name)
+        student_name = data['student_name']
+        student_name = site.decode_value(student_name)
+        student = site.get_student(student_name)
+        course.add_student(student)

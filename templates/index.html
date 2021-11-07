@@ -1,16 +1,37 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block title %}
-    Обучение программированию
-{% endblock title %}
+Главная страница
+{% endblock %}
 {% block style %}
-    {% include 'inc-style.html' %}
-{% endblock style %}
+	{% include "inc-style.html" %}
+{% endblock %}
 {% block menu %}
-    {% include 'inc-menu.html' %}
-{% endblock menu %}
+	{% include "inc-menu.html" %}
+{% endblock %}
 {% block body %}
-    {% include 'inc-index-body.html' %}
-{% endblock body %}
-    
-    
+	<div>
+		<a href="/create_category/">Создать новую категорию</a>
+	</div>
+	<div>
+		<h1>Список существующих категорий</h1>
+        {% for item in objects_list %}
+        <li>
+            {{item.name}} <span>Количество курсов: {{item.course_count()}}</span>
+			<a href="/courses_list/?id={{item.id}}">Показать курсы</a>
+        </li>
+        {% endfor %}
+		<br>
+		<hr>
+	</div>
+	<div>
+		<li>
+			<a href="/student_list/">Список студентов</a>
+		</li>
+		<li>
+			<a href="/create_student/">Создать студента</a>
+		</li>
+		<li>
+			<a href="/add_student/">Добавить студента на курс</a>
+		</li>
+	</div>
+{% endblock %}
